@@ -1,11 +1,11 @@
 'use strict';
 
 const errorHandlingMiddleware = require('../lib/error-handling-middleware');
-const usersRouter = require('./users');
-const authRouter = require('./auth');
+// const usersRouter = require('./users');
+// const authRouter = require('./auth');
+const locationRouter = require('./location');
 
 module.exports = (app) => {
-  app.use('/api/v1/auth', authRouter);
-  app.use('/api/v1/users', usersRouter);
+  app.use('/api/v1/location', locationRouter);
   app.use(errorHandlingMiddleware);
 };

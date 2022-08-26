@@ -16,7 +16,6 @@ router.route('/')
   // Create New User
   .post(authorize([ADMIN]), userCtrl.createUser);
 
-
 router.route('/:id')
 
   // Get User
@@ -27,6 +26,5 @@ router.route('/:id')
 
   // Delete User
   .delete(authorize(ADMIN), userCtrl.deleteUser);
-
 
 module.exports = router;
