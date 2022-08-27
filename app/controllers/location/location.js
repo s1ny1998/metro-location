@@ -9,6 +9,7 @@ const getRoute = async (req, res, next) => {
     const { start, destination } = req.query;
     const startData = await MetroStations.findOne({ name: start });
     const destinationData = await MetroStations.findOne({ name: destination });
+    const stops = [];
 
     if (startData.line === destinationData.line
         || start === 'Majestic' || destination === 'Majestic'
@@ -24,11 +25,13 @@ const getRoute = async (req, res, next) => {
       if (startIndex < destinationIndex) {
         allStops = line.LineArray
           .slice(startIndex, destinationIndex + 1);
+        stops.push(stops.length - 1);
       } else {
         allStops = line.LineArray
           .slice(destinationIndex, startIndex + 1).reverse();
+        stops.push(stops.length - 1);
       }
-      res.json({ allStops, areaOfInterest: [destination] });
+      res.json({ allStops, areaOfInterest: [destination], stops });
     } else {
       const startLine = await MetroLines.findOne({ name: startData.line });
       const destinationLine = await MetroLines.findOne({ name: destinationData.line });
@@ -39,19 +42,25 @@ const getRoute = async (req, res, next) => {
       if (startIndex < middleIndexOfStartLine) {
         allStops = startLine.LineArray
           .slice(startIndex, middleIndexOfStartLine + 1);
+        stops.push(allStops.length);
       } else {
         allStops = startLine.LineArray
           .slice(middleIndexOfStartLine, startIndex + 1).reverse();
+        stops.push(allStops.length);
       }
       if (destinationIndex < middleIndexOfDestinationLine) {
         allStops.push(...destinationLine.LineArray
           .slice(destinationIndex, middleIndexOfDestinationLine).reverse());
+        stops.push(destinationLine.LineArray
+          .slice(destinationIndex, middleIndexOfDestinationLine).length);
       } else {
         destinationLine.LineArray.reverse();
         allStops.push(...destinationLine.LineArray
           .slice(middleIndexOfDestinationLine - 1, destinationIndex + 1).reverse());
+        stops.push(destinationLine.LineArray
+          .slice(middleIndexOfDestinationLine - 1, destinationIndex + 1).length);
       }
-      res.json({ allStops, areaOfInterest: ['Majestic', destination] });
+      res.json({ allStops, areaOfInterest: ['Majestic', destination], stops });
     }
   } catch (error) {
     next(error);
