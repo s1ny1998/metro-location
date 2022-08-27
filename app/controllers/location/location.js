@@ -42,11 +42,11 @@ const getRoute = async (req, res, next) => {
       if (startIndex < middleIndexOfStartLine) {
         allStops = startLine.LineArray
           .slice(startIndex, middleIndexOfStartLine + 1);
-        stops.push(allStops.length);
+        stops.push(allStops.length - 1);
       } else {
         allStops = startLine.LineArray
           .slice(middleIndexOfStartLine, startIndex + 1).reverse();
-        stops.push(allStops.length);
+        stops.push(allStops.length - 1);
       }
       if (destinationIndex < middleIndexOfDestinationLine) {
         allStops.push(...destinationLine.LineArray
