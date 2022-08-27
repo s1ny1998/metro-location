@@ -25,11 +25,11 @@ const getRoute = async (req, res, next) => {
       if (startIndex < destinationIndex) {
         allStops = line.LineArray
           .slice(startIndex, destinationIndex + 1);
-        stops.push(stops.length);
+        stops.push(allStops.length - 1);
       } else {
         allStops = line.LineArray
           .slice(destinationIndex, startIndex + 1).reverse();
-        stops.push(stops.length);
+        stops.push(allStops.length - 1);
       }
       res.json({ allStops, areaOfInterest: [destination], stops });
     } else {
